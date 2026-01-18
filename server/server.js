@@ -18,17 +18,16 @@ const PORT = process.env.PORT || 4000;
 await connectDB()
 await connectCloudinary()
 
-const corsOptions = {
-  origin: true, 
-  credentials: true,
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'],
-  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
-  exposedHeaders: ['set-cookie', 'Authorization']
-};
+app.use(cors({
+  origin: true,  
+  credentials: true
+}));
 
-app.use(cors(corsOptions));
-
-app.options('*', cors(corsOptions));
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', req.headers.origin || '*');
+  res.header('Access-Control-Allow-Credentials', 'true');
+  next();
+});
 
 app.post('/stripe' , express.raw({type: 'application/json'}), stripeWebHooks)
 app.use(express.json());
