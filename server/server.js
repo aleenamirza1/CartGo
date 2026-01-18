@@ -18,13 +18,13 @@ const PORT = process.env.PORT || 4000;
 await connectDB()
 await connectCloudinary()
 
-const allowedOrigins = ['https://cart-go-frontend.vercel.app/']
+const allowedOrigins = ['https://cart-go-frontend.vercel.app']
+
+app.use(cors({ origin: allowedOrigins, credentials: true }))
 
 app.post('/stripe' , express.raw({type: 'application/json'}), stripeWebHooks)
-
 app.use(express.json());
 app.use(cookieParser());
-app.use(cors({ origin: allowedOrigins, credentials: true }))
 
 app.get('/', (req, res) => res.send("Api is Working"));
 
